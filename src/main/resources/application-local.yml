@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    hikari:
+      jdbc-url: ${interceptor.spring.datasource.url}
+      username: ${interceptor.spring.datasource.username}
+      password: ${interceptor.spring.datasource.password}
