@@ -29,6 +29,4 @@ public class Member {
     @Column(nullable = false)
     private boolean isPremium;
 
-
-
 }
