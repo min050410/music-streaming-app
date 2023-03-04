@@ -16,13 +16,13 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="comment_id")
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name="member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id", nullable = false)
     private Member member;
 
     @Column(updatable = false, name="create_at")
