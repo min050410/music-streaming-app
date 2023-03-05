@@ -29,6 +29,13 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'com.querydsl:querydsl-apt'
 
+	// json web token
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	// spring security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'

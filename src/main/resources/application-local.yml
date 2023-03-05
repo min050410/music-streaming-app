@@ -8,3 +8,4 @@ spring:
       jdbc-url: ${interceptor.spring.datasource.url}
       username: ${interceptor.spring.datasource.username}
       password: ${interceptor.spring.datasource.password}
+
