@@ -40,6 +40,7 @@ public class MemberService {
                 rq.getRole());
         memberRepository.save(member);
         member.encodePassword(passwordEncoder);
+
         return member.getId();
     }
 
