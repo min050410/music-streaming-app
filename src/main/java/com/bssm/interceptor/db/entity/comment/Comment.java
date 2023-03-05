@@ -1,6 +1,8 @@
 package com.bssm.interceptor.db.entity.comment;
 
+import com.bssm.interceptor.db.entity.common.BaseTimeEntity;
 import com.bssm.interceptor.db.entity.member.Member;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,8 +12,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@NoArgsConstructor
-public class Comment {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

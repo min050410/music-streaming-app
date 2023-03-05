@@ -19,6 +19,11 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+    public final com.bssm.interceptor.db.entity.common.QBaseTimeEntity _super = new com.bssm.interceptor.db.entity.common.QBaseTimeEntity(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
+
     public final StringPath email = createString("email");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
@@ -27,7 +32,12 @@ public class QMember extends EntityPathBase<Member> {
 
     public final EnumPath<com.bssm.interceptor.db.enums.MemberRoleType> memberRoleType = createEnum("memberRoleType", com.bssm.interceptor.db.enums.MemberRoleType.class);
 
-    public final StringPath name = createString("name");
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
+
+    public final StringPath nickname = createString("nickname");
+
+    public final StringPath password = createString("password");
 
     public QMember(String variable) {
         super(Member.class, forVariable(variable));

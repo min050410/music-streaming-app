@@ -1,15 +1,17 @@
 package com.bssm.interceptor.db.entity.song;
+import com.bssm.interceptor.db.entity.common.BaseTimeEntity;
 import com.bssm.interceptor.db.entity.member.Member;
 import com.bssm.interceptor.db.entity.playlist.Playlist;
 import com.bssm.interceptor.db.enums.SongGenreType;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
 @Entity
-@NoArgsConstructor
-public class Song {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Song extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

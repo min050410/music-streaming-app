@@ -1,7 +1,9 @@
 package com.bssm.interceptor.db.entity.playlist;
 
+import com.bssm.interceptor.db.entity.common.BaseTimeEntity;
 import com.bssm.interceptor.db.entity.member.Member;
 import com.bssm.interceptor.db.entity.song.Song;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,8 +13,8 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor
-public class Playlist {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Playlist extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

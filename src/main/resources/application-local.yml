@@ -9,3 +9,8 @@ spring:
       username: ${interceptor.spring.datasource.username}
       password: ${interceptor.spring.datasource.password}
 
+  security:
+    jwt:
+      header: ${interceptor.spring.jwt.header}
+      secret: ${interceptor.spring.jwt.secret}
+      token-validity-in-seconds: ${interceptor.spring.jwt.token-validity-in-seconds}
