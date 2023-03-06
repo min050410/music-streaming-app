@@ -1,17 +1,19 @@
-package com.bssm.interceptor.web.config;
+package com.bssm.interceptor.web.config.security;
 
-import com.bssm.interceptor.web.security.JwtAuthenticationFilter;
-import com.bssm.interceptor.web.security.JwtTokenProvider;
+import com.bssm.interceptor.web.config.security.jwt.JwtAuthenticationFilter;
+import com.bssm.interceptor.web.config.security.jwt.JwtTokenProvider;
+import com.bssm.interceptor.web.path.ApiPath;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -19,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,37 +42,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .cors().disable()
                 .csrf().disable()
+
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+
                 .authorizeRequests()
-                .antMatchers("api/member/**").permitAll()
-                .antMatchers("api/song/**").permitAll()
-//                .antMatchers("/member").hasRole("USER")
-//                .anyRequest().authenticated();
-                .anyRequest().permitAll()
+
+                // 화이트 리스트
+                .antMatchers(AUTH_WHITELIST).permitAll()
+
+                // 에러 핸들러
+                .antMatchers(ApiPath.ERROR_AUTH).permitAll()
+
+                // 멤버
+                .antMatchers(ApiPath.MEMBER).permitAll()
+                .anyRequest().authenticated()
                 .and()
+
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class);
+                        UsernamePasswordAuthenticationFilter.class)
+                        .exceptionHandling()
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler);
+
+
     }
 
     private static final String[] AUTH_WHITELIST = {
-//            "/v2/api-docs",
-//            "/v3/api-docs/**",
-//            "/configuration/ui",
-            "/swagger-resources/**",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**",
-            "/file/**",
-            "/image/**",
-            "/swagger/**",
             "/swagger-ui/**",
-//            "/h2/**"
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/resources/**",
+            "/",
     };
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(AUTH_WHITELIST);
-    }
 
 }

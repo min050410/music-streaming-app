@@ -1,18 +1,15 @@
 package com.bssm.interceptor.web.domain.member.controller.rq;
 
 import com.bssm.interceptor.db.enums.MemberRoleType;
-import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Data
-@Builder
 public class MemberSignUpRq {
 
-    @NotBlank(message = "아이디를 입력하세요")
+    @NotBlank(message = "이메일을 입력해주세요")
     private String email;
 
     @NotBlank(message = "닉네임을 입력해주세요")

@@ -1,4 +1,4 @@
-package com.bssm.interceptor.web.security;
+package com.bssm.interceptor.web.config.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

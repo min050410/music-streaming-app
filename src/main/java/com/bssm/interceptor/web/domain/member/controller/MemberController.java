@@ -1,9 +1,10 @@
 package com.bssm.interceptor.web.domain.member.controller;
 
+import com.bssm.interceptor.web.domain.member.controller.rq.MemberLoginRq;
 import com.bssm.interceptor.web.domain.member.controller.rq.MemberSignUpRq;
 import com.bssm.interceptor.web.domain.member.service.MemberService;
 import com.bssm.interceptor.web.path.ApiPath;
-import com.bssm.interceptor.web.security.JwtTokenProvider;
+import com.bssm.interceptor.web.config.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -25,8 +26,9 @@ public class MemberController {
         return this.memberService.signUp(rq);
     }
 
-
-//    @PostMapping("/login")
-//    public String login()
+    @PostMapping(ApiPath.MEMBER_LOGIN)
+    public String login(@Validated @RequestBody MemberLoginRq rq) {
+        return this.memberService.login(rq);
+    }
 
 }

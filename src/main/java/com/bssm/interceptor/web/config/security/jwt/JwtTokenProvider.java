@@ -1,4 +1,4 @@
-package com.bssm.interceptor.web.security;
+package com.bssm.interceptor.web.config.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -36,9 +36,9 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String userPk, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userPk);
-        claims.put("roles", roles);
+    public String createToken(String email, String nickname) {
+        Claims claims = Jwts.claims().setSubject(email);
+        claims.put("nickname", nickname);
 
         Date now = new Date();
         return Jwts.builder()
