@@ -1,5 +1,7 @@
 package com.bssm.interceptor.web.config.security.jwt;
 
+import com.bssm.interceptor.web.config.security.context.MemberContextService;
+import com.bssm.interceptor.web.config.security.context.MemberContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -8,15 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -30,7 +29,7 @@ public class JwtTokenProvider {
 
     @Value("${spring.security.jwt.token-validity-in-seconds}")
     private long tokenValidTime;
-    private final UserDetailsService userDetailsService;
+    private final MemberContextService memberContextService;
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -50,8 +49,8 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        MemberContext memberContext = memberContextService.loadUserByEmail(this.getUserPk(token));
+        return new UsernamePasswordAuthenticationToken(memberContext, null, null);
     }
 
     public String getUserPk(String token) {
@@ -63,12 +62,8 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String jwtToken) {
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-            return !claims.getBody().getExpiration().before(new Date());
-        } catch (Exception e) {
-            return false;
-        }
+        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+        return !claims.getBody().getExpiration().before(new Date());
     }
 
 }

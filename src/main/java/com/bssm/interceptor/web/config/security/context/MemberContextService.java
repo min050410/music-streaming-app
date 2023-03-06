@@ -1,24 +1,24 @@
-package com.bssm.interceptor.web.config.security.jwt;
+package com.bssm.interceptor.web.config.security.context;
 
 import com.bssm.interceptor.db.entity.member.Member;
 import com.bssm.interceptor.web.domain.member.repository.MemberRepository;
 import com.bssm.interceptor.web.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CustomUserDetailService implements UserDetailsService {
+public class MemberContextService {
     private final MemberRepository memberRepository;
-    @Override
-    public CustomUserDetails loadUserByUsername(String username) {
-        Member member = memberRepository.findByEmail(username)
+    public MemberContext loadUserByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
 
-        return CustomUserDetails.create(
+        return MemberContext.create(
                 member.getEmail(),
-                member.getPassword());
+                member.getNickname(),
+                member.getMemberRoleType());
+
     }
 
 }
