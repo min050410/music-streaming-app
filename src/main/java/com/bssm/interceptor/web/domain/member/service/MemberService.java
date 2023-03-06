@@ -19,7 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Long signUp (MemberSignUpRq rq) {
+    public Long signUp(MemberSignUpRq rq) {
 
         if (memberRepository.findByEmail(rq.getEmail()).isPresent()) {
             throw new AlreadyEmailExistException();
@@ -40,7 +40,6 @@ public class MemberService {
                 rq.getRole());
         memberRepository.save(member);
         member.encodePassword(passwordEncoder);
-
         return member.getId();
     }
 

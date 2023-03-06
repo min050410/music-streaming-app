@@ -14,3 +14,7 @@ spring:
       header: ${interceptor.spring.jwt.header}
       secret: ${interceptor.spring.jwt.secret}
       token-validity-in-seconds: ${interceptor.spring.jwt.token-validity-in-seconds}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
