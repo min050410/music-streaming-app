@@ -13,4 +13,5 @@ public class ApiPath {
     // 곡
     public static final String SONG = "/api/song";
     public static final String SONG_BY_ID = "/api/song/{id}";
+
 }

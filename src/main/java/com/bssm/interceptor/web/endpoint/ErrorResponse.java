@@ -9,4 +9,5 @@ public class ErrorResponse {
     private Integer statusCode;
     private String reason;
     private String message;
+
 }
