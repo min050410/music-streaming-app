@@ -1,0 +1,43 @@
+package com.bssm.interceptor.app.domain.song;
+
+import com.bssm.interceptor.app.domain.BaseTimeEntity;
+import com.bssm.interceptor.app.domain.member.Member;
+import com.bssm.interceptor.app.domain.playlist.Playlist;
+import com.bssm.interceptor.app.domain.enums.SongGenreType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import javax.persistence.*;
+
+@Getter
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Song extends BaseTimeEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "song_id")
+    private Long Id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SongGenreType songGenreType;
+
+    @Column(nullable = false)
+    private Long Length;
+
+    @Column(nullable = false)
+    private String file;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playlist_id")
+    private Playlist playlist;
+
+}
