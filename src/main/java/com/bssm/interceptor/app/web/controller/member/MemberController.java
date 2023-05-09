@@ -1,7 +1,7 @@
 package com.bssm.interceptor.app.web.controller.member;
 
-import com.bssm.interceptor.app.web.dto.member.MemberLoginRq;
-import com.bssm.interceptor.app.web.dto.member.MemberSignUpRq;
+import com.bssm.interceptor.app.web.dto.member.MemberLoginRequest;
+import com.bssm.interceptor.app.web.dto.member.MemberSignUpRequest;
 import com.bssm.interceptor.app.domain.member.MemberService;
 import com.bssm.interceptor.common.config.security.context.MemberContext;
 import com.bssm.interceptor.app.web.path.ApiPath;
@@ -24,19 +24,19 @@ public class MemberController {
 
     @Operation(summary = "회원가입")
     @PostMapping(ApiPath.MEMBER_SIGNUP)
-    public Long signUp(@Validated @RequestBody MemberSignUpRq rq) {
+    public Long signUp(@Validated @RequestBody MemberSignUpRequest rq) {
         return this.memberService.signUp(rq);
     }
 
     @Operation(summary = "로그인")
     @PostMapping(ApiPath.MEMBER_LOGIN)
-    public String login(@Validated @RequestBody MemberLoginRq rq) {
+    public String login(@Validated @RequestBody MemberLoginRequest rq) {
         return this.memberService.login(rq);
     }
 
     @Operation(summary = "내 정보 불러오기")
     @GetMapping(ApiPath.MEMBER)
-    public MemberContext FindMemberSelf(@AuthenticationPrincipal MemberContext memberContext) {
+    public MemberContext findMemberSelf(@AuthenticationPrincipal MemberContext memberContext) {
         return memberContext;
     }
 

@@ -1,7 +1,7 @@
 package com.bssm.interceptor.app.domain.member;
 
-import com.bssm.interceptor.app.web.dto.member.MemberLoginRq;
-import com.bssm.interceptor.app.web.dto.member.MemberSignUpRq;
+import com.bssm.interceptor.app.web.dto.member.MemberLoginRequest;
+import com.bssm.interceptor.app.web.dto.member.MemberSignUpRequest;
 import com.bssm.interceptor.common.exception.AlreadyEmailExistException;
 import com.bssm.interceptor.common.exception.NoSuchEmailException;
 import com.bssm.interceptor.common.exception.PasswordNotMatchException;
@@ -21,7 +21,7 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
-    public Long signUp(MemberSignUpRq rq) {
+    public Long signUp(MemberSignUpRequest rq) {
         if (memberRepository.findByEmail(rq.getEmail()).isPresent()) {
             throw new AlreadyEmailExistException();
         }
@@ -31,7 +31,7 @@ public class MemberService {
         return saveMember(rq);
     }
 
-    public Long saveMember(MemberSignUpRq rq) {
+    public Long saveMember(MemberSignUpRequest rq) {
         Member member = Member.create(
             rq.getEmail(),
             rq.getNickname(),
@@ -42,7 +42,7 @@ public class MemberService {
         return member.getId();
     }
 
-    public String login(MemberLoginRq rq) {
+    public String login(MemberLoginRequest rq) {
         Member member = memberRepository.findByEmail(rq.getEmail())
             .orElseThrow(NoSuchEmailException::new);
         if (!passwordEncoder.matches(rq.getPassword(), member.getPassword())) {

@@ -14,6 +14,6 @@ public class ErrorController {
     @GetMapping(ApiPath.ERROR_AUTH)
     public void errorAuth(@RequestParam(value = "message") String message) {
         throw new JwtException(message);
-
     }
+
 }
