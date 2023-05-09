@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class MemberLoginRq {
+public class MemberLoginRequest {
 
     @NotBlank(message = "이메일을 입력해주세요")
     @Schema(description = "이메일")

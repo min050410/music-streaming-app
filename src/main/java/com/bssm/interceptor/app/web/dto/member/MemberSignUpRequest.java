@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Data
-public class MemberSignUpRq {
+public class MemberSignUpRequest {
 
     @NotBlank(message = "이메일을 입력해주세요")
     @Schema(description = "이메일")
