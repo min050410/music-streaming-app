@@ -8,15 +8,16 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class MemberContextService {
+public class LoginMemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberContext loadUserByEmail(String email) {
+    public LoginMember loadUserByEmail(String email) {
         Member member = memberRepository.findByEmail(email)
             .orElseThrow(UserNotFoundException::new);
 
-        return MemberContext.create(
+        return LoginMember.create(
+            member.getId(),
             member.getEmail(),
             member.getNickname(),
             member.getMemberRoleType());
