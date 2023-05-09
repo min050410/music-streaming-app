@@ -1,7 +1,7 @@
 package com.bssm.interceptor.common.config.security.jwt;
 
-import com.bssm.interceptor.common.config.security.context.MemberContextService;
-import com.bssm.interceptor.common.config.security.context.MemberContext;
+import com.bssm.interceptor.common.config.security.context.LoginMemberService;
+import com.bssm.interceptor.common.config.security.context.LoginMember;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -29,7 +29,8 @@ public class JwtTokenProvider {
 
     @Value("${spring.security.jwt.token-validity-in-seconds}")
     private long tokenValidTime;
-    private final MemberContextService memberContextService;
+    private final LoginMemberService memberContextService;
+
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -41,15 +42,15 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(new Date(now.getTime() + tokenValidTime))
+            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .compact();
     }
 
     public Authentication getAuthentication(String token) {
-        MemberContext memberContext = memberContextService.loadUserByEmail(this.getUserPk(token));
+        LoginMember memberContext = memberContextService.loadUserByEmail(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(memberContext, null, null);
     }
 

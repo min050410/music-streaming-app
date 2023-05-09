@@ -2,7 +2,6 @@ package com.bssm.interceptor.app.domain.song;
 
 import com.bssm.interceptor.app.domain.BaseTimeEntity;
 import com.bssm.interceptor.app.domain.member.Member;
-import com.bssm.interceptor.app.domain.playlist.Playlist;
 import com.bssm.interceptor.app.domain.enums.SongGenreType;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,7 +17,7 @@ public class Song extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "song_id")
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -37,16 +36,13 @@ public class Song extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "playlist_id")
-    private Playlist playlist;
-
     @Builder
-    private Song(String name, String file, SongGenreType songGenreType, Long length) {
+    private Song(String name, String file, SongGenreType songGenreType, Long length, Member member) {
         this.name = name;
         this.file = file;
         this.songGenreType = songGenreType;
         this.length = length;
+        this.member = member;
     }
 
 }

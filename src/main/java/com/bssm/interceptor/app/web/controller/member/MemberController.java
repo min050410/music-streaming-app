@@ -3,7 +3,7 @@ package com.bssm.interceptor.app.web.controller.member;
 import com.bssm.interceptor.app.web.dto.member.MemberLoginRequest;
 import com.bssm.interceptor.app.web.dto.member.MemberSignUpRequest;
 import com.bssm.interceptor.app.domain.member.MemberService;
-import com.bssm.interceptor.common.config.security.context.MemberContext;
+import com.bssm.interceptor.common.config.security.context.LoginMember;
 import com.bssm.interceptor.app.web.path.ApiPath;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,8 +36,8 @@ public class MemberController {
 
     @Operation(summary = "내 정보 불러오기")
     @GetMapping(ApiPath.MEMBER)
-    public MemberContext findMemberSelf(@AuthenticationPrincipal MemberContext memberContext) {
-        return memberContext;
+    public LoginMember findMemberSelf(@AuthenticationPrincipal LoginMember loginMember) {
+        return loginMember;
     }
 
 
