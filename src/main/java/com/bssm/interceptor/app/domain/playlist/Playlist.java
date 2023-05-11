@@ -3,6 +3,7 @@ package com.bssm.interceptor.app.domain.playlist;
 import com.bssm.interceptor.app.domain.BaseTimeEntity;
 import com.bssm.interceptor.app.domain.member.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,5 +25,17 @@ public class Playlist extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @Builder
+    private Playlist(String name, Member member) {
+        this.name = name;
+        this.member = member;
+    }
+
+    boolean isNotPossibleToAccessPlaylist(Member member) {
+        Long loginMemberId = member.getId();
+        Long memberId = this.member.getId();
+        return !memberId.equals(loginMemberId);
+    }
 
 }
