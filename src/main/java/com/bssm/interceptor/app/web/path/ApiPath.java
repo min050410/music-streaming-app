@@ -12,8 +12,12 @@ public class ApiPath {
 
     // 곡
     public static final String SONG = "/api/song";
-
     public static final String SONG_CREATE = "/api/song";
     public static final String SONG_BY_ID = "/api/song/{id}";
+
+    // 플레이리스트
+    public static final String PLAYLIST = "/api/playlist";
+    public static final String PLAYLIST_CREATE = "/api/playlist";
+    public static final String PLAYLIST_ADD = "/api/playlist/add";
 
 }
