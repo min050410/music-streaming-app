@@ -8,12 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 public class PlaylistSongAssoc {
 
     @Id
@@ -27,5 +29,11 @@ public class PlaylistSongAssoc {
     @ManyToOne
     @JoinColumn(name = "song_id")
     private Song song;
+
+    @Builder
+    private PlaylistSongAssoc(Playlist playlist, Song song) {
+        this.playlist = playlist;
+        this.song = song;
+    }
 
 }
