@@ -12,7 +12,7 @@ public class PagedResponse<T> {
 
     private List<T> list;
 
-    public static <T> PagedResponse<T> create(Pagination pagination, List<T> list) {
+    public static <T> PagedResponse<T> of(Pagination pagination, List<T> list) {
         return new PagedResponse<>(pagination, list);
     }
 
