@@ -38,4 +38,8 @@ public class Playlist extends BaseTimeEntity {
         return !memberId.equals(loginMemberId);
     }
 
+    public void update(Playlist requestPlaylist) {
+        this.name = requestPlaylist.name;
+    }
+
 }

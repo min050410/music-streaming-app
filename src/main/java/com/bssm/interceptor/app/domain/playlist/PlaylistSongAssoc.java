@@ -1,5 +1,6 @@
 package com.bssm.interceptor.app.domain.playlist;
 
+import com.bssm.interceptor.app.domain.BaseTimeEntity;
 import com.bssm.interceptor.app.domain.song.Song;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
-public class PlaylistSongAssoc {
+public class PlaylistSongAssoc extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

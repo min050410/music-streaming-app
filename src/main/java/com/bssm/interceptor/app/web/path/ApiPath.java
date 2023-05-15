@@ -19,5 +19,7 @@ public class ApiPath {
     public static final String PLAYLIST = "/api/playlist";
     public static final String PLAYLIST_CREATE = "/api/playlist";
     public static final String PLAYLIST_ADD = "/api/playlist/add";
+    public static final String PLAYLIST_FIND = "/api/playlist/find/{id}";
+    public static final String PLAYLIST_UPDATE = "/api/playlist/update/{id}";
 
 }

@@ -86,6 +86,25 @@ public class PlaylistService {
         );
     }
 
+    /**
+     * 플레이리스트 수정
+     * @param loginMember
+     * @param id
+     * @param playlistRequest
+     */
+    @Transactional
+    public void updatePlaylist(LoginMember loginMember, Long id, PlaylistRequest playlistRequest) {
+        Member member = memberRepository.getReferenceById(loginMember.getId());
+        Playlist playlist = findById(id);
+        Playlist requestPlaylist = playlistRequest.toPlaylist(member);
+
+        if (playlist.isNotPossibleToAccessPlaylist(member)) {
+            throw new NotPossibleToAccessPlaylistException();
+        }
+
+        playlist.update(requestPlaylist);
+    }
+
     private Playlist findById(Long id) {
         return playlistRepository.findById(id)
             .orElseThrow(PlaylistNotFoundException::new);
