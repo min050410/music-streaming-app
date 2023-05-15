@@ -28,7 +28,7 @@ public class Swagger2Config {
         return new OpenAPI()
             .info(new Info().title("Interceptor API")
                 .description("개인 프로젝트 API 명세서입니다.")
-                .version("v0.0.1"))
+                .version("v1.0.0"))
             .components(getComponents());
     }
 

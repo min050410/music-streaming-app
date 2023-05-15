@@ -18,3 +18,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: on
+      multiline: true
