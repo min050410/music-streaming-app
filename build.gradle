@@ -1,7 +1,14 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.9'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+
 	// querydsl
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
@@ -26,8 +33,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	// querydsl
-	implementation 'com.querydsl:querydsl-jpa'
-	implementation 'com.querydsl:querydsl-apt'
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
 	// json web token
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
@@ -39,6 +46,9 @@ dependencies {
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
 	implementation 'org.springdoc:springdoc-openapi-security:1.6.6'
+
+	// p6spy
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -53,27 +63,24 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-// querydsl
-def querydslSrcDir = 'src/main/querydsl'
+def querydslDir = "$buildDir/generated/'querydsl'"
 
 querydsl {
 	jpa = true
-	querydslSourcesDir = querydslSrcDir
-	library = "com.querydsl:querydsl-apt"
-}
-
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
-
-compileQuerydsl{
-	options.annotationProcessorPath = configurations.querydsl
+	querydslSourcesDir = querydslDir
 }
 
 sourceSets {
-	main {
-		java {
-			srcDirs = ['src/main/java', querydslSrcDir]
-		}
+	main.java.srcDir querydslDir
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
 	}
+	querydsl.extendsFrom compileClasspath
 }
