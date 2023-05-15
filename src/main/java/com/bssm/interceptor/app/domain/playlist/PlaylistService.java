@@ -12,6 +12,7 @@ import com.bssm.interceptor.common.config.security.context.LoginMember;
 import com.bssm.interceptor.common.exception.NotPossibleToAccessPlaylistException;
 import com.bssm.interceptor.common.exception.PlaylistNotFoundException;
 import com.bssm.interceptor.common.exception.SongNotFoundException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -108,6 +109,21 @@ public class PlaylistService {
     private Playlist findById(Long id) {
         return playlistRepository.findById(id)
             .orElseThrow(PlaylistNotFoundException::new);
+    }
+
+    @Transactional
+    public void deletePlaylist(LoginMember loginMember, Long id) {
+        Member member = memberRepository.getReferenceById(loginMember.getId());
+        Playlist playlist = findById(id);
+
+        if (playlist.isNotPossibleToAccessPlaylist(member)) {
+            throw new NotPossibleToAccessPlaylistException();
+        }
+
+        List<PlaylistSongAssoc> playlistSongAssoc = playlistSongAssocRepository.findPlaylistSongAssocsByPlaylist(playlist);
+
+        playlistSongAssocRepository.deleteAll(playlistSongAssoc);
+        playlistRepository.delete(playlist);
     }
 
 }
