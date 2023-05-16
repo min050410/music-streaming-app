@@ -18,7 +18,9 @@ public class ApiPath {
     // 플레이리스트
     public static final String PLAYLIST = "/api/playlist";
     public static final String PLAYLIST_CREATE = "/api/playlist";
-    public static final String PLAYLIST_ADD = "/api/playlist/add";
+    public static final String PLAYLIST_SONG_ADD = "/api/playlist/song/add";
+
+    public static final String PLAYLIST_SONG_DELETE = "/api/playlist/song/delete";
     public static final String PLAYLIST_FIND = "/api/playlist/find/{id}";
     public static final String PLAYLIST_UPDATE = "/api/playlist/update/{id}";
     public static final String PLAYLIST_DELETE = "/api/playlist/delete/{id}";

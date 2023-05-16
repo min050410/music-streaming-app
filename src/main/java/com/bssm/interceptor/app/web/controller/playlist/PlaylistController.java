@@ -2,7 +2,7 @@ package com.bssm.interceptor.app.web.controller.playlist;
 
 import com.bssm.interceptor.app.domain.playlist.PlaylistService;
 import com.bssm.interceptor.app.web.common.response.Pagination;
-import com.bssm.interceptor.app.web.dto.playlist.AddSongRequest;
+import com.bssm.interceptor.app.web.dto.playlist.SongAssocRequest;
 import com.bssm.interceptor.app.web.dto.playlist.PlaylistRequest;
 import com.bssm.interceptor.app.web.dto.playlist.PlaylistResponse;
 import com.bssm.interceptor.app.web.path.ApiPath;
@@ -40,11 +40,20 @@ public class PlaylistController {
     }
 
     @Operation(summary = "플레이리스트 곡 추가")
-    @PostMapping(ApiPath.PLAYLIST_ADD)
+    @PostMapping(ApiPath.PLAYLIST_SONG_ADD)
     public ResponseEntity<Void> addSong(
         @AuthenticationPrincipal LoginMember loginMember,
-        @Valid @RequestBody AddSongRequest addSongRequest) {
+        @Valid @RequestBody SongAssocRequest addSongRequest) {
         playlistService.addSong(loginMember, addSongRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "플레이리스트 곡 삭제")
+    @DeleteMapping(ApiPath.PLAYLIST_SONG_DELETE)
+    public ResponseEntity<Void> deleteSong(
+        @AuthenticationPrincipal LoginMember loginMember,
+        @Valid @RequestBody SongAssocRequest deleteSongRequest) {
+        playlistService.deleteSong(loginMember, deleteSongRequest);
         return ResponseEntity.ok().build();
     }
 
