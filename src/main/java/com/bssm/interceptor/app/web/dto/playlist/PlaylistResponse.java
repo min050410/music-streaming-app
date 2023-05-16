@@ -1,5 +1,6 @@
 package com.bssm.interceptor.app.web.dto.playlist;
 
+import com.bssm.interceptor.app.domain.member.Member;
 import com.bssm.interceptor.app.domain.playlist.Playlist;
 import com.bssm.interceptor.app.domain.song.Song;
 import com.bssm.interceptor.app.web.common.response.PagedResponse;
@@ -24,15 +25,18 @@ public class PlaylistResponse {
 
     private String createdDate;
 
+    private Boolean editable;
+
     private MemberResponse writer;
 
     private PagedResponse<SongResponse> songs;
 
-    public static PlaylistResponse of(Playlist playlist, Pagination pagination, Page<Song> playlistSongs) {
+    public static PlaylistResponse of(Member member, Playlist playlist, Pagination pagination, Page<Song> playlistSongs) {
         return new PlaylistResponse(
             playlist.getId(),
             playlist.getName(),
             DateUtil.formatDateYYYYMMDD(playlist.getCreateDate()),
+            !playlist.isNotPossibleToAccessPlaylist(member),
             MemberResponse.of(playlist.getMember()),
             SongResponse.pagedListOf(pagination, playlistSongs)
         );

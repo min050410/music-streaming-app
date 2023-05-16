@@ -1,7 +1,7 @@
 package com.bssm.interceptor.app.domain.playlist;
 
 import com.bssm.interceptor.app.domain.member.Member;
-import com.bssm.interceptor.app.domain.member.MemberRepository;
+import com.bssm.interceptor.app.domain.member.MemberService;
 import com.bssm.interceptor.app.domain.song.Song;
 import com.bssm.interceptor.app.domain.song.SongRepository;
 import com.bssm.interceptor.app.web.common.response.Pagination;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PlaylistService {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     private final PlaylistRepository playlistRepository;
 
@@ -39,7 +39,7 @@ public class PlaylistService {
      */
     @Transactional
     public Long create(LoginMember loginMember, PlaylistRequest playlistRequest) {
-        Member member = memberRepository.getReferenceById(loginMember.getId());
+        Member member = memberService.findLoginMember(loginMember);
 
         Playlist playlist = playlistRepository.save(playlistRequest.toPlaylist(member));
         return playlist.getId();
@@ -52,7 +52,7 @@ public class PlaylistService {
      */
     @Transactional
     public void addSong(LoginMember loginMember, AddSongRequest addSongRequest) {
-        Member member = memberRepository.getReferenceById(loginMember.getId());
+        Member member = memberService.findLoginMember(loginMember);
 
         Song song = songRepository.findById(addSongRequest.getSongId())
             .orElseThrow(SongNotFoundException::new);
@@ -75,12 +75,14 @@ public class PlaylistService {
      */
     @Transactional(readOnly = true)
     public PlaylistResponse findPlayList(LoginMember loginMember, Pagination pagination, Long id) {
+        Member member = memberService.findLoginMember(loginMember);
         Playlist playlist = findById(id);
 
         PageRequest pageRequest = pagination.toPageRequest();
         Page<Song> playlistSongs = playlistSongAssocRepository.findPlaylistSongList(playlist, pageRequest);
 
         return PlaylistResponse.of(
+            member,
             playlist,
             pagination,
             playlistSongs
@@ -95,7 +97,7 @@ public class PlaylistService {
      */
     @Transactional
     public void updatePlaylist(LoginMember loginMember, Long id, PlaylistRequest playlistRequest) {
-        Member member = memberRepository.getReferenceById(loginMember.getId());
+        Member member = memberService.findLoginMember(loginMember);
         Playlist playlist = findById(id);
         Playlist requestPlaylist = playlistRequest.toPlaylist(member);
 
@@ -106,14 +108,14 @@ public class PlaylistService {
         playlist.update(requestPlaylist);
     }
 
-    private Playlist findById(Long id) {
-        return playlistRepository.findById(id)
-            .orElseThrow(PlaylistNotFoundException::new);
-    }
-
+    /**
+     * 플레이리스트 삭제
+     * @param loginMember
+     * @param id
+     */
     @Transactional
     public void deletePlaylist(LoginMember loginMember, Long id) {
-        Member member = memberRepository.getReferenceById(loginMember.getId());
+        Member member = memberService.findLoginMember(loginMember);
         Playlist playlist = findById(id);
 
         if (playlist.isNotPossibleToAccessPlaylist(member)) {
@@ -124,6 +126,11 @@ public class PlaylistService {
 
         playlistSongAssocRepository.deleteAll(playlistSongAssoc);
         playlistRepository.delete(playlist);
+    }
+
+    private Playlist findById(Long id) {
+        return playlistRepository.findById(id)
+            .orElseThrow(PlaylistNotFoundException::new);
     }
 
 }
