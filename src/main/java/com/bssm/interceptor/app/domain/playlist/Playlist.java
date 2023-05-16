@@ -32,7 +32,11 @@ public class Playlist extends BaseTimeEntity {
         this.member = member;
     }
 
-    boolean isNotPossibleToAccessPlaylist(Member member) {
+    public boolean isNotPossibleToAccessPlaylist(Member member) {
+        if (member == null) {
+            return true;
+        }
+
         Long loginMemberId = member.getId();
         Long memberId = this.member.getId();
         return !memberId.equals(loginMemberId);
