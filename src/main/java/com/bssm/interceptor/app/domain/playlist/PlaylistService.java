@@ -80,10 +80,8 @@ public class PlaylistService {
     public boolean isDuplicateSong(Playlist playlist, Song song) {
         List<PlaylistSongAssoc> playlistSongs = playlistSongAssocRepository.findPlaylistSongAssocsByPlaylist(playlist);
 
-        boolean isDuplicate = playlistSongs.stream()
+        return playlistSongs.stream()
             .anyMatch(playlistSongAssoc -> playlistSongAssoc.getSong().equals(song));
-
-        return isDuplicate;
     }
 
     @Transactional
