@@ -11,6 +11,7 @@ import com.bssm.interceptor.app.web.dto.playlist.PlaylistResponse;
 import com.bssm.interceptor.common.config.security.context.LoginMember;
 import com.bssm.interceptor.common.exception.NotPossibleToAccessPlaylistException;
 import com.bssm.interceptor.common.exception.PlaylistNotFoundException;
+import com.bssm.interceptor.common.exception.PlaylistSongDuplicateException;
 import com.bssm.interceptor.common.exception.SongNotFoundException;
 import com.bssm.interceptor.common.exception.SongNotInPlaylistException;
 import java.util.List;
@@ -62,11 +63,27 @@ public class PlaylistService {
 
         Playlist playlist = findById(addSongRequest.getPlaylistId());
 
+        // [1] 플레이리스트 접근 권한
         if (playlist.isNotPossibleToAccessPlaylist(member)) {
             throw new NotPossibleToAccessPlaylistException();
         }
 
+        // [2] 곡이 중복되었는지 체크
+        if (isDuplicateSong(playlist, song)) {
+            throw new PlaylistSongDuplicateException();
+        }
+
+        // [3] 플레이리스트에 곡 저장
         playlistSongAssocRepository.save(addSongRequest.toPlaylistSongAssoc(playlist, song));
+    }
+
+    public boolean isDuplicateSong(Playlist playlist, Song song) {
+        List<PlaylistSongAssoc> playlistSongs = playlistSongAssocRepository.findPlaylistSongAssocsByPlaylist(playlist);
+
+        boolean isDuplicate = playlistSongs.stream()
+            .anyMatch(playlistSongAssoc -> playlistSongAssoc.getSong().equals(song));
+
+        return isDuplicate;
     }
 
     @Transactional
