@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 public class AddSongRequest {
 
     @NotNull
-    private Long songId;
+    private Long playlistId;
 
     @NotNull
-    private Long playlistId;
+    private Long songId;
 
     public PlaylistSongAssoc toPlaylistSongAssoc(Playlist playlist, Song song) {
         return PlaylistSongAssoc.builder()

@@ -57,6 +57,9 @@ public class WebSecurityConfig {
 
             // 멤버
             .antMatchers(ApiPath.MEMBER_LOGIN, ApiPath.MEMBER_SIGNUP).permitAll()
+
+            // 플레이리스트 조회
+            .antMatchers(ApiPath.PLAYLIST_FIND).permitAll()
             .anyRequest().authenticated()
             .and()
 

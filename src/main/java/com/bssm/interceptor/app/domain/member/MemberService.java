@@ -2,6 +2,7 @@ package com.bssm.interceptor.app.domain.member;
 
 import com.bssm.interceptor.app.web.dto.member.MemberLoginRequest;
 import com.bssm.interceptor.app.web.dto.member.MemberSignUpRequest;
+import com.bssm.interceptor.common.config.security.context.LoginMember;
 import com.bssm.interceptor.common.exception.AlreadyEmailExistException;
 import com.bssm.interceptor.common.exception.NoSuchEmailException;
 import com.bssm.interceptor.common.exception.PasswordNotMatchException;
@@ -51,5 +52,13 @@ public class MemberService {
         return jwtTokenProvider.createToken(member.getEmail(), member.getNickname());
     }
 
+    public Member findLoginMember(LoginMember loginMember) {
+        if (loginMember == null) {
+            return null;
+        }
+
+        Long loginMemberId = loginMember.getId();
+        return memberRepository.getReferenceById(loginMemberId);
+    }
 
 }

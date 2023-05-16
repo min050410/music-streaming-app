@@ -1,7 +1,7 @@
 package com.bssm.interceptor.app.domain.song;
 
 import com.bssm.interceptor.app.domain.member.Member;
-import com.bssm.interceptor.app.domain.member.MemberRepository;
+import com.bssm.interceptor.app.domain.member.MemberService;
 import com.bssm.interceptor.app.domain.playlist.PlaylistRepository;
 import com.bssm.interceptor.app.web.common.response.ListResponse;
 import com.bssm.interceptor.app.web.dto.song.SongRequest;
@@ -20,11 +20,11 @@ public class SongService {
 
     private final PlaylistRepository playlistRepository;
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    @Transactional()
+    @Transactional
     public Long create(LoginMember loginMember, SongRequest songRequest) {
-        Member member = memberRepository.getReferenceById(loginMember.getId());
+        Member member = memberService.findLoginMember(loginMember);
 
         Song song = songRepository.save(songRequest.toSong(member));
         return song.getId();
