@@ -24,3 +24,6 @@ decorator:
     p6spy:
       enable-logging: on
       multiline: true
+
+server:
+  port: 8080
