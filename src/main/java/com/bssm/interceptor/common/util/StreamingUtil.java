@@ -24,6 +24,20 @@ public final class StreamingUtil {
 
     private static final long CHUNK_SIZE = 1024 * 1024;
 
+    public static String uploadMp3(MultipartFile multipartFile) {
+        try {
+            String originalFileName = multipartFile.getOriginalFilename();
+            if (originalFileName == null) {
+                throw new FileException("파일 이름이 올바르지 않습니다.");
+            }
+            String saveFileName = getSaveFileName(originalFileName);
+            multipartFile.transferTo(new File(UPLOAD_DIR + saveFileName));
+            return saveFileName;
+        } catch (IOException e) {
+            throw new FileException("파일 이름이 올바르지 않습니다.");
+        }
+    }
+
     public static ResourceRegion streamMp3(HttpHeaders headers) {
         long contentLength = getContentLength();
 
