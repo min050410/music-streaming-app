@@ -30,16 +30,16 @@ public class Song extends BaseTimeEntity {
     private Long length;
 
     @Column(nullable = false)
-    private String file;
+    private String uid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder
-    private Song(String name, String file, SongGenreType songGenreType, Long length, Member member) {
+    private Song(String name, String uid, SongGenreType songGenreType, Long length, Member member) {
         this.name = name;
-        this.file = file;
+        this.uid = uid;
         this.songGenreType = songGenreType;
         this.length = length;
         this.member = member;

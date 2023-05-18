@@ -60,6 +60,8 @@ public class WebSecurityConfig {
 
             // 플레이리스트 조회
             .antMatchers(ApiPath.PLAYLIST_FIND).permitAll()
+
+            .antMatchers(ApiPath.SONG_PLAY).permitAll()
             .anyRequest().authenticated()
             .and()
 

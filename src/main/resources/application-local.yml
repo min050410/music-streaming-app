@@ -3,6 +3,10 @@ spring:
     activate:
       on-profile: local
 
+  servlet:
+    multipart:
+      max-file-size: 32MB
+
   datasource:
     hikari:
       jdbc-url: ${interceptor.spring.datasource.url}
@@ -24,3 +28,6 @@ decorator:
     p6spy:
       enable-logging: on
       multiline: true
+
+server:
+  port: 8080

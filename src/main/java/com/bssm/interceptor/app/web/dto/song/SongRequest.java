@@ -21,12 +21,11 @@ public class SongRequest {
     @ValidEnum(enumClass = SongGenreType.class)
     private SongGenreType genre;
 
-    public Song toSong(Member member) {
-        // TODO: file 로직 추가시 수정
+    public Song toSong(Member member, String uid, Long length) {
         return Song.builder()
             .name(name)
-            .file("hi")
-            .length(20L)
+            .uid(uid)
+            .length(length)
             .songGenreType(genre)
             .member(member)
             .build();
