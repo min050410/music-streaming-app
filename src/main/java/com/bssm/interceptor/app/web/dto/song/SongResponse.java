@@ -36,7 +36,7 @@ public class SongResponse {
             song.getName(),
             DateUtil.formatDateYYYYMMDD(song.getCreateDate()),
             song.getLength(),
-            song.getFile(),
+            song.getUid(),
             MemberResponse.of(song.getMember())
         );
     }

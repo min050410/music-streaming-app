@@ -24,7 +24,7 @@ public class FindSongResponse {
         FindSongResponse rs = new FindSongResponse();
         rs.songId = song.getId();
         rs.name = song.getName();
-        rs.file = song.getFile();
+        rs.file = song.getUid();
         rs.songGenreType = song.getSongGenreType();
         return rs;
     }

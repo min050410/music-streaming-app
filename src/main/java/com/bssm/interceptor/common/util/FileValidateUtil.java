@@ -14,6 +14,7 @@ public final class FileValidateUtil {
             throw new FileException("이미지 파일이 비어있습니다.");
         }
         if (multipartFile.getSize() > 33554432) {
+
             throw new FileException("곡 파일의 크기가 32MB를 넘습니다.");
         }
         if (!isSupportedContentType(multipartFile.getContentType())) {
@@ -22,6 +23,6 @@ public final class FileValidateUtil {
     }
 
     private static boolean isSupportedContentType(String contentType) {
-        return Objects.equals(contentType, "audio/mp3");
+        return Objects.equals(contentType, "audio/mpeg");
     }
 }
