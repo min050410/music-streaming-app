@@ -3,6 +3,10 @@ spring:
     activate:
       on-profile: local
 
+  servlet:
+    multipart:
+      max-file-size: 32MB
+
   datasource:
     hikari:
       jdbc-url: ${interceptor.spring.datasource.url}

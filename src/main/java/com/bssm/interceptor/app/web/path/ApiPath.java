@@ -14,7 +14,7 @@ public class ApiPath {
     public static final String SONG = "/api/song";
     public static final String SONG_CREATE = "/api/song";
     public static final String SONG_BY_ID = "/api/song/{id}";
-    public static final String SONG_PLAY = "/api/song/play";
+    public static final String SONG_PLAY = "/api/song/play/{uid}";
 
     // 플레이리스트
     public static final String PLAYLIST = "/api/playlist";
