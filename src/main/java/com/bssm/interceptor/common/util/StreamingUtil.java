@@ -1,8 +1,7 @@
 package com.bssm.interceptor.common.util;
 
-import com.bssm.interceptor.common.exception.FileException;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
@@ -10,70 +9,54 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRange;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class StreamingUtil {
 
-    private static final String PATH = "/Users/min/projects/music-streaming-app/file/music/maple.mp3";
-
-    private static final String UPLOAD_DIR = "/Users/min/projects/music-streaming-app/file/music/";
-
-    private static final Resource RESOURCE = new FileSystemResource(PATH);
+    private static final String PATH = "/Users/min/projects/music-streaming-app/file/music/";
 
     private static final long CHUNK_SIZE = 1024 * 1024;
 
-    public static String uploadMp3(MultipartFile multipartFile) {
-        try {
-            String originalFileName = multipartFile.getOriginalFilename();
-            if (originalFileName == null) {
-                throw new FileException("파일 이름이 올바르지 않습니다.");
-            }
-            String saveFileName = getSaveFileName(originalFileName);
-            multipartFile.transferTo(new File(UPLOAD_DIR + saveFileName));
-            return saveFileName;
-        } catch (IOException e) {
-            throw new FileException("파일 이름이 올바르지 않습니다.");
-        }
-    }
+    private static final ConcurrentHashMap<String, Resource> RESOURCE_CACHE = new ConcurrentHashMap<>();
 
-    public static ResourceRegion streamMp3(HttpHeaders headers) {
-        long contentLength = getContentLength();
+    public static ResourceRegion streamMp3(String uid, HttpHeaders headers) {
+        Resource resource = getResource(uid);
+        long contentLength = getContentLength(uid);
+        long start = 0;
+        long rangeLength = Long.min(CHUNK_SIZE, contentLength);
 
-        try {
-            HttpRange httpRange = headers.getRange().stream().findFirst().get();
-            long start = httpRange.getRangeStart(contentLength);
+        // httpRange 설정
+        if (headers.getRange().size() > 0) {
+            HttpRange httpRange = headers.getRange().get(0);
+            start = httpRange.getRangeStart(contentLength);
             long end = httpRange.getRangeEnd(contentLength);
-            long rangeLength = Long.min(CHUNK_SIZE, end - start + 1);
-            return new ResourceRegion(RESOURCE, start, rangeLength);
-        } catch (Exception e) {
-            long rangeLength = Long.min(CHUNK_SIZE, contentLength);
-            return new ResourceRegion(RESOURCE, 0, rangeLength);
-        }
-    }
 
-    public static Resource getResource() {
-        return RESOURCE;
-    }
-
-    public static Long getContentLength() {
-        try {
-            return RESOURCE.contentLength();
-        } catch (IOException e) {
-            return 0L;
+            rangeLength = Long.min(CHUNK_SIZE, end - start + 1);
         }
+
+        return new ResourceRegion(resource, start, rangeLength);
     }
 
     public static String getPath() {
         return PATH;
     }
 
-    private static String getSaveFileName(String originalFilename) {
-        int extPosIndex = originalFilename.lastIndexOf(".");
-        String ext = originalFilename.substring(extPosIndex + 1);
+    public static Resource getResource(String uid) {
+        Resource resource = RESOURCE_CACHE.get(uid);
+        if (resource == null) {
+            resource = new FileSystemResource(PATH + uid + ".mp3");
+            RESOURCE_CACHE.put(uid, resource);
+        }
+        return resource;
+    }
 
-        return UUID.randomUUID().toString() + "." + ext;
+    public static Long getContentLength(String uid) {
+        try {
+            Resource resource = getResource(uid);
+            return resource.contentLength();
+        } catch (IOException e) {
+            return 0L;
+        }
     }
 
 }
